@@ -1,0 +1,355 @@
+{% extends 'core/base.html' %}
+{% load roles_extras %}
+{% block title %}Accessible Files{% endblock %}
+{% block content %}
+<main class="files-main" dir="ltr">
+  <section class="files-section" dir="ltr">
+    <h2 class="files-title">Files Accessible to You</h2>
+    {% if files %}
+    <div class="files-table-wrapper">
+      <table class="files-table" dir="ltr">
+        <thead>
+          <tr>
+            <th style="width: 60px;">#</th>
+            <th>File</th>
+            <th>Description</th>
+            <th>Size</th>
+            <th>Date</th>
+            <th>Access</th>
+            <th>Roles</th>
+            <th>Download</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for file in files %}
+          <tr>
+            <td class="row-index-cell">
+              <span class="row-index-anim">{{ forloop.counter }}</span>
+            </td>
+            <td title="{{ file.file.name|cut:'uploads/' }}">
+              <a href="{% url 'file_detail' file.id %}?next={{ request.path }}" style="color:inherit;text-decoration:underline;cursor:pointer;">
+                {{ file.file.name|cut:'uploads/' }}
+              </a>
+            </td>
+            <td title="{{ file.description }}">{{ file.description }}</td>
+            <td>{{ file.size|filesizeformat }}</td>
+            <td>{{ file.uploaded_at|date:'Y-m-d H:i' }}</td>
+            <td>
+              <div class="access-badge-wrapper">
+                {% if file.uploader == user %}
+                  <a href="{% url 'edit_file' file.id %}?next={{ request.path }}" class="btn btn-sm btn-outline-primary ms-1">Edit</a>
+                {% endif %}
+              </div>
+            </td>
+            <td title="{{ file.allowed_roles }}">
+              <div class="roles-cell">
+                {% with roles=file.allowed_roles|split_roles %}
+                  {% if roles %}
+                    {% if roles|length == 1 %}
+                      <span class="role-badge" style="max-width:120px;overflow:hidden;text-overflow:ellipsis;">{{ roles.0 }}</span>
+                    {% else %}
+                      <span class="role-badge">{{ roles.0 }}</span>
+                      <span class="role-badge role-badge-dots">…</span>
+                    {% endif %}
+                  {% endif %}
+                {% endwith %}
+              </div>
+            </td>
+            <td>
+              <a href="{{ file.file.url }}" class="btn btn-sm btn-success">Download</a>
+            </td>
+
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+      <div class="alert alert-info text-center">No files to display.</div>
+    {% endif %}
+    <a href="{{ request.GET.next|default:'/' }}" class="btn btn-secondary files-back-btn">Back</a>
+  </section>
+</main>
+<style>
+.files-main {
+  min-height: 80vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  background: transparent;
+  direction: ltr;
+}
+
+:root {
+  --body-bg: #f6f7fa;
+  --card-bg-light: #fff;
+  --card-bg-dark: #23243a;
+  --text-dark: #b3c6ff;
+}
+body.dark, html.dark {
+  --body-bg: #181a23;
+  --card-bg-light: #23243a;
+  --card-bg-dark: #23243a;
+  --text-dark: #b3c6ff;
+}
+body, html {
+  background: var(--body-bg);
+}
+.files-section {
+  background: var(--card-bg-light, #fff);
+  border-radius: 32px;
+  box-shadow: 0 4px 32px #6a8dff33, 0 0 0 6px #b3c6ff33;
+  padding: 2.5rem 2.5rem 2rem 2.5rem;
+  margin: 2.5rem 0;
+  width: 99vw;
+  max-width: 99vw;
+  min-width: 320px;
+  transition: background 0.2s, box-shadow 0.2s;
+  direction: ltr;
+  border: 4px solid transparent;
+  background-clip: padding-box;
+  position: relative;
+  z-index: 1;
+}
+.files-section:before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -8px;
+  border-radius: 40px;
+  background: linear-gradient(120deg, #6a8dff 0%, #b3c6ff 100%);
+  opacity: 0.18;
+  filter: blur(6px);
+}
+html.dark .files-section, body.dark .files-section {
+  background: var(--card-bg-dark, #23243a);
+  color: var(--text-dark, #b3c6ff);
+  box-shadow: 0 4px 32px #23243a66, 0 0 0 6px #6a8dff33;
+  border: 4px solid transparent;
+}
+html.dark .files-section:before, body.dark .files-section:before {
+  background: linear-gradient(120deg, #23243a 0%, #6a8dff 100%);
+  opacity: 0.22;
+}
+.files-table {
+  width: 100%;
+  min-width: 2000px;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: transparent;
+  font-size: 1.08rem;
+  direction: ltr;
+}
+.row-index-cell {
+  text-align: center;
+  font-weight: bold;
+  background: transparent;
+  padding: 0.55rem 0.2rem;
+  width: 60px;
+  position: relative;
+}
+.row-index-anim {
+  display: inline-block;
+  min-width: 32px;
+  min-height: 32px;
+  background: linear-gradient(135deg, #6a8dff 60%, #b3c6ff 100%);
+  color: #fff;
+  border-radius: 50%;
+  font-size: 1.1rem;
+  font-weight: 700;
+  box-shadow: 0 2px 8px #b3c6ff33;
+  animation: popIn 0.7s cubic-bezier(.68,-0.55,.27,1.55);
+  line-height: 32px;
+  text-align: center;
+  transition: background 0.2s;
+}
+@keyframes popIn {
+  0% { transform: scale(0.2); opacity: 0; }
+  60% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+html.dark .row-index-anim {
+  background: linear-gradient(135deg, #23243a 60%, #6a8dff 100%);
+  color: #b3c6ff;
+  box-shadow: 0 2px 8px #23243a55;
+}
+.files-title {
+  text-align: center;
+  color: #2a3a5a;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+}
+.files-table-wrapper {
+  overflow-x: auto;
+  border-radius: 12px;
+  background: inherit;
+  box-shadow: none;
+}
+.files-table {
+  width: 100%;
+  min-width: 800px;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: transparent;
+  font-size: 1rem;
+}
+.files-table thead th {
+  background: #f3f4f8cc;
+  color: #23243a;
+  font-weight: 600;
+  border-bottom: 2px solid #e0e0e0;
+  padding: 0.7rem 0.5rem 0.4rem 0.5rem;
+  white-space: nowrap;
+  text-align: center;
+}
+.files-table td {
+  background: transparent;
+  color: #23243a;
+  border-bottom: 1px solid #ececec;
+  padding: 0.55rem 0.5rem;
+  text-align: center;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.files-table tbody tr:hover {
+  background: #f7faff;
+}
+.files-back-btn {
+  display: block;
+  width: 100%;
+  margin: 2rem auto 0 auto;
+  max-width: 300px;
+}
+@media (max-width: 900px) {
+  .files-section {
+    padding: 1.2rem 0.2rem 1.2rem 0.2rem;
+    margin: 1.2rem 0;
+  }
+  .files-title {
+    font-size: 1.3rem;
+    margin-bottom: 1.1rem;
+  }
+  .files-table {
+    font-size: 0.93rem;
+    min-width: 600px;
+  }
+}
+html.dark .files-section, body.dark .files-section {
+  background: var(--card-bg-dark, #23243a);
+  color: var(--text-dark, #b3c6ff);
+  box-shadow: 0 2px 12px #23243a44;
+}
+html.dark .files-table thead th, body.dark .files-table thead th {
+  background: #23243acc;
+  color: #b3c6ff;
+  border-bottom: 2px solid #33374d;
+}
+html.dark .files-table td, body.dark .files-table td {
+  background: transparent;
+  color: #b3c6ff;
+  border-bottom: 1px solid #33374d;
+}
+html.dark .files-table tbody tr:hover, body.dark .files-table tbody tr:hover {
+  background: #23243a;
+}
+</style>
+<style>
+.access-badge-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+}
+.access-badge {
+  display: inline-block;
+  padding: 4px 16px;
+  border-radius: 16px;
+  font-size: 0.98em;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  border: 1.5px solid #e0e0e0;
+  min-width: 70px;
+  text-align: center;
+  margin-left: 0.2em;
+  margin-right: 0.2em;
+}
+.access-badge-public {
+  background: #e6fbe6;
+  color: #1a7f37;
+  border-color: #34d058;
+}
+.access-badge-private {
+  background: #fff6e6;
+  color: #b26a00;
+  border-color: #ffb84d;
+}
+html.dark .access-badge-public {
+  background: #1a3a1a;
+  color: #34d058;
+  border-color: #34d058;
+}
+html.dark .access-badge-private {
+  background: #3a2a1a;
+  color: #ffb84d;
+  border-color: #ffb84d;
+}
+</style>
+<style>
+.roles-cell {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  justify-content: center;
+  align-items: center;
+  min-width: 60px;
+  max-width: 160px;
+  margin: 0 auto;
+  overflow-x: auto;
+}
+.role-badge {
+  display: inline-block;
+  background: #f3f4f8;
+  color: #23243a;
+  border-radius: 6px;
+  padding: 1px 7px;
+  font-size: 0.92em;
+  font-weight: 500;
+  white-space: nowrap;
+  border: 1px solid #e0e0e0;
+  margin: 1px 0;
+  max-width: 70px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: none;
+}
+.role-badge-dots {
+  background: #e0e0e0;
+  color: #888;
+  border: 1px solid #e0e0e0;
+}
+html.dark .role-badge {
+  background: #23243a;
+  color: #b3c6ff;
+  border: 1px solid #33374d;
+}
+html.dark .role-badge-dots {
+  background: #33374d;
+  color: #b3c6ff;
+  border: 1px solid #33374d;
+}
+.roles-cell {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 4px;
+  justify-content: center;
+  align-items: center;
+  min-width: 60px;
+  max-width: 160px;
+  margin: 0 auto;
+  overflow-x: hidden;
+}
+</style>
+{% endblock %}

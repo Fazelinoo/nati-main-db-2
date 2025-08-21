@@ -1,0 +1,17 @@
+{% extends 'core/base.html' %}
+{% block title %}تکمیل تسک{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2>تکمیل تسک</h2>
+    <div class="card p-3 mb-3">
+        <h5>{{ task.title }}</h5>
+        <p>{{ task.description }}</p>
+        <small>از {{ task.start_date }} تا {{ task.due_date }}</small>
+    </div>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success">تسک را تکمیل کن</button>
+        <a href="{% url 'user_tasks' %}" class="btn btn-secondary">بازگشت</a>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'core/base.html' %}
+{% block title %}کامنت‌های تسک{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2>کامنت‌های تسک: {{ task.title }}</h2>
+    <div class="card mb-3">
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">ثبت کامنت</button>
+                <a href="{% url 'project_detail' task.project.id %}" class="btn btn-secondary">بازگشت</a>
+            </form>
+        </div>
+    </div>
+    <h5 class="mb-3">لیست کامنت‌ها</h5>
+    <ul class="list-group">
+        {% for comment in task.comments.all %}
+        <li class="list-group-item">
+            <div class="fw-bold">{{ comment.user.username }}</div>
+            <div>{{ comment.text }}</div>
+            <div class="small text-muted">{{ comment.created_at|date:'Y/m/d H:i' }}</div>
+        </li>
+        {% empty %}
+        <li class="list-group-item">کامنتی ثبت نشده است.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'core/base.html' %}
+{% block title %}All Users{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2>All Users</h2>
+    <div class="row g-3">
+        {% for item in user_info %}
+        <div class="col-12">
+            <a href="/admin2/users/{{ item.user.id }}/files/" class="d-flex align-items-center justify-content-between p-2 rounded shadow-sm text-decoration-none user-tg-box position-relative" style="direction:ltr;text-align:left;">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="user-tg-avatar-wrap position-relative">
+                        <div class="user-tg-avatar">
+                            {{ item.user.username|first|upper }}
+                        </div>
+                    </div>
+                    <div>
+                        <div style="font-weight:600;font-size:1.1em;">{{ item.user.username }}</div>
+                        <div class="user-tg-role">{{ item.user.get_role_display }}</div>
+                        <div class="user-tg-status" style="font-size:0.92em;color:var(--muted-light);">
+                            {{ item.online_status }}
+                        </div>
+                        <a href="/tasks/assign/{{ item.user.id }}/" class="btn btn-sm btn-outline-primary mt-1">تخصیص تسک</a>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

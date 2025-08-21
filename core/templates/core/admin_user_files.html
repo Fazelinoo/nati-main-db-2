@@ -1,0 +1,21 @@
+{% extends 'core/base.html' %}
+{% block title %}User Public Files{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Public Files of {{ user.username }}</h2>
+    <div class="row g-3">
+        {% for file in files %}
+        <div class="col-12">
+            <a href="{% url 'file_detail' file.id %}" class="d-block p-2 rounded shadow-sm text-decoration-none user-tg-box position-relative" style="direction:ltr;text-align:left;">
+                <div style="font-weight:600;font-size:1.1em;">{{ file.name }}</div>
+                <div style="font-size:0.95em;color:var(--muted-light);">{{ file.description }}</div>
+            </a>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info">No public files found for this user.</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

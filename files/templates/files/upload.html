@@ -1,0 +1,40 @@
+{% extends 'core/base.html' %}
+{% block title %}آپلود فایل جدید{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-7">
+        <div class="card p-4 mt-4">
+            <h3 class="mb-3">آپلود فایل جدید</h3>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+                <div class="mb-3">
+                    <label class="form-label">فایل</label>
+                    {{ form.file }}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">توضیحات</label>
+                    {{ form.description }}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">سطح دسترسی</label>
+                    {{ form.access_level }}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">نقش‌های مجاز</label>
+                    <div class="d-flex flex-wrap gap-2">
+                        {% for checkbox in form.allowed_roles %}
+                            <div class="form-check" style="min-width: 140px;">
+                                {{ checkbox.tag }}
+                                <label class="form-check-label">{{ checkbox.choice_label }}</label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">آپلود</button>
+                <a href="{{ request.GET.next|default:'/' }}" class="btn btn-secondary w-100 mt-2">بازگشت</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

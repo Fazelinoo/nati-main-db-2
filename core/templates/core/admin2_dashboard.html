@@ -1,0 +1,57 @@
+{% extends 'core/base.html' %}
+{% block title %}داشبورد مدیریت پیشرفته{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">داشبورد مدیریت پیشرفته</h2>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card admin2-card text-center p-4">
+                <h4>کاربران</h4>
+                <p>مدیریت و مشاهده کاربران، نقش‌ها و فایل‌ها</p>
+                <a href="/admin2/users/" class="btn btn-outline-primary w-100">مدیریت کاربران</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card admin2-card text-center p-4">
+                <h4>پروژه‌ها</h4>
+                <p>مدیریت پروژه‌ها، تایید، آرشیو و مشاهده تسک‌ها</p>
+                <a href="/admin2/projects/" class="btn btn-outline-primary w-100">مدیریت پروژه‌ها</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card admin2-card text-center p-4">
+                <h4>تسک‌ها</h4>
+                <p>مدیریت و مشاهده تسک‌ها، تغییر وضعیت و کاربران</p>
+                <a href="/admin2/tasks/" class="btn btn-outline-primary w-100">مدیریت تسک‌ها</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card admin2-card text-center p-4">
+                <h4>گزارش‌های هفتگی</h4>
+                <p>مدیریت و مشاهده گزارش‌های کاربران و پروژه‌ها</p>
+                <a href="/admin2/reports/" class="btn btn-outline-primary w-100">مدیریت گزارش‌ها</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card admin2-card text-center p-4">
+                <h4>فایل‌ها</h4>
+                <p>مدیریت و مشاهده فایل‌های کاربران</p>
+                <a href="/admin2/files/" class="btn btn-outline-primary w-100">مدیریت فایل‌ها</a>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+.admin2-card {
+    border-radius: 18px;
+    box-shadow: 0 4px 24px #bfc7d680;
+    background: var(--card-bg-light);
+    color: var(--text-light);
+    transition: background 0.4s, color 0.4s;
+}
+html.dark .admin2-card, body.dark .admin2-card {
+    background: var(--card-bg-dark);
+    color: var(--text-dark);
+}
+</style>
+{% endblock %}

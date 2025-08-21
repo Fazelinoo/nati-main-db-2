@@ -1,0 +1,100 @@
+{% extends 'core/base.html' %}
+{% load roles_extras %}
+{% block title %}File Details{% endblock %}
+{% block content %}
+<style>
+  .file-bg {
+    background: var(--main-bg-light);
+    min-height: 100vh;
+    padding-top: 32px;
+    transition: background 0.2s;
+  }
+  .file-card {
+    background: var(--card-bg-light) !important;
+    color: var(--text-light) !important;
+    border-radius: 16px;
+    box-shadow: 0 2px 16px #b3c6ff22;
+    border: 2.5px solid var(--border-light) !important;
+    transition: background 0.2s, color 0.2s, border 0.2s;
+    max-width: 700px;
+    margin: auto;
+    padding: 2rem 1.5rem;
+  }
+  .table.file-detail-table {
+    background: inherit;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1.5px solid var(--border-light);
+    margin-bottom: 0;
+  }
+  .table.file-detail-table th, .table.file-detail-table td {
+    background: inherit;
+    color: inherit;
+    border-color: var(--border-light);
+    vertical-align: middle;
+  }
+  .file-preview-box {
+    background: #f3f4f8;
+    color: var(--text-light);
+    border-radius: 8px;
+    padding: 1rem;
+    max-height: 400px;
+    overflow: auto;
+    font-family: monospace, monospace;
+    transition: background 0.2s, color 0.2s;
+  }
+  .dark .file-bg, html.dark .file-bg {
+    background: var(--main-bg-dark) !important;
+  }
+  .dark .file-card, html.dark .file-card {
+    background: var(--card-bg-dark) !important;
+    color: var(--text-dark) !important;
+    border: 2.5px solid var(--border-dark) !important;
+    box-shadow: 0 2px 16px #0004;
+  }
+  .dark .table.file-detail-table, html.dark .table.file-detail-table {
+    background: var(--card-bg-dark) !important;
+    border-color: var(--border-dark) !important;
+  }
+  .dark .table.file-detail-table th,
+  .dark .table.file-detail-table td,
+  html.dark .table.file-detail-table th,
+  html.dark .table.file-detail-table td {
+    background: var(--card-bg-dark) !important;
+    color: var(--text-dark) !important;
+    border-color: var(--border-dark) !important;
+  }
+  .dark .file-preview-box, html.dark .file-preview-box {
+    background: var(--card-bg-dark);
+    color: var(--text-dark);
+    box-shadow: 0 2px 12px #0002;
+  }
+</style>
+<div class="file-bg">
+  <div class="file-card">
+    <h2 class="files-title">File Details</h2>
+    <table class="table file-detail-table" style="width:100%;">
+      <tr><th>File Name</th><td>{{ file.file.name|cut:'uploads/' }}</td></tr>
+      <tr><th>Description</th><td style="max-width:350px;word-break:break-all;">{{ file.description }}</td></tr>
+      <tr><th>Size</th><td>{{ file.size|filesizeformat }}</td></tr>
+      <tr><th>Date</th><td>{{ file.uploaded_at|date:'Y-m-d H:i' }}</td></tr>
+      <tr><th>Access</th><td>{{ file.get_access_level_display }}</td></tr>
+      <tr><th>Roles</th><td>{% for role in file.allowed_roles|split_roles %}<span class="role-badge">{{ role }}</span> {% endfor %}</td></tr>
+      <tr><th>Uploader</th><td>{{ file.uploader }}</td></tr>
+      <tr><th>Download</th><td><a href="{{ file.file.url }}" class="btn btn-success">Download</a></td></tr>
+    </table>
+    <div style="margin-top:2rem;">
+      {% if file.file.name|lower|endswith:'.jpg' or file.file.name|lower|endswith:'.jpeg' or file.file.name|lower|endswith:'.png' or file.file.name|lower|endswith:'.gif' %}
+        <img src="{{ file.file.url }}" alt="Image" style="max-width:100%;border-radius:12px;box-shadow:0 2px 12px #b3c6ff33;" />
+      {% elif file.file.name|lower|endswith:'.txt' or file.file.name|lower|endswith:'.md' %}
+        <pre class="file-preview-box">{{ file.file.read|default_if_none:'' }}</pre>
+      {% elif file.file.name|lower|endswith:'.py' or file.file.name|lower|endswith:'.js' or file.file.name|lower|endswith:'.html' %}
+        <pre class="file-preview-box">{{ file.file.read|default_if_none:'' }}</pre>
+      {% elif file.file.name|lower|endswith:'.mp3' or file.file.name|lower|endswith:'.wav' %}
+        <audio controls style="width:100%;margin-top:1rem;"><source src="{{ file.file.url }}">Your browser does not support the audio element.</audio>
+      {% endif %}
+    </div>
+    <a href="{{ request.GET.next|default:'/' }}" class="btn btn-secondary files-back-btn" style="margin-top:2rem;">Back</a>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'core/base.html' %}
+{% load jalali_extras %}
+{% block title %}مدیریت تسک‌ها{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">مدیریت تسک‌ها</h2>
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead>
+                <tr>
+                    <th>عنوان</th>
+                    <th>پروژه</th>
+                    <th>کاربران</th>
+                    <th>تاریخ شروع</th>
+                    <th>تاریخ پایان</th>
+                    <th>وضعیت</th>
+                    <th>عملیات</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in tasks %}
+                <tr>
+                    <td>{{ task.title }}</td>
+                    <td>{{ task.project.name }}</td>
+                    <td>{% for u in task.users.all %}<span class="badge bg-info">{{ u.username }}</span> {% endfor %}</td>
+                    <td>{{ task.start_date|to_jalali }}</td>
+                    <td>{{ task.due_date|to_jalali }}</td>
+                    <td><span class="badge bg-{% if task.status == 'done' %}success{% elif task.status == 'doing' %}warning text-dark{% elif task.status == 'late' %}danger{% else %}secondary{% endif %}">{{ task.get_status_display }}</span></td>
+                    <td>
+                        <a href="{% url 'task_detail' task.id %}" class="btn btn-sm btn-outline-info">جزئیات</a>
+
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="7" class="text-center">تسکی وجود ندارد.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

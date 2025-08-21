@@ -1,0 +1,63 @@
+{% extends 'core/base.html' %}
+{% block title %}ورود به پنل تیم{% endblock %}
+{% block extra_head %}\
+<!-- buggggg dare -->
+ <!-- roye dark mode safhe poshti dark nemishe va dynamic nist -->
+<style>
+    body {
+        background: linear-gradient(120deg, #e3e6ed 60%, #f8fafc 100%);
+    }
+    .login-card {
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 4px 24px #bfc7d680;
+        padding: 2.5rem 2rem 2rem 2rem;
+        margin-top: 5vh;
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .login-title {
+        font-weight: bold;
+        font-size: 2rem;
+        color: #3a3a4a;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+    .form-control:focus {
+        border-color: #6c63ff;
+        box-shadow: 0 0 0 0.2rem #6c63ff22;
+    }
+    .btn-login {
+        background: linear-gradient(90deg, #6c63ff 60%, #5edfff 100%);
+        color: #fff;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        transition: background 0.2s;
+    }
+    .btn-login:hover {
+        background: linear-gradient(90deg, #5edfff 60%, #6c63ff 100%);
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div class="login-card">
+    <div class="login-title">Login</div>
+    <form method="post" novalidate>
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+        {% endif %}
+        <div class="mb-3">
+            <label for="id_username" class="form-label">User Name</label>
+            <input type="text" name="username" class="form-control" id="id_username" required autofocus>
+        </div>
+        <div class="mb-3">
+            <label for="id_password" class="form-label">Password</label>
+            <input type="password" name="password" class="form-control" id="id_password" required>
+        </div>
+        <button type="submit" class="btn btn-login w-100">Login</button>
+    </form>
+</div>
+{% endblock %}

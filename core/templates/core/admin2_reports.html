@@ -1,0 +1,36 @@
+{% extends 'core/base.html' %}
+{% load jalali_extras %}
+{% block title %}مدیریت گزارش‌های هفتگی{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">مدیریت گزارش‌های هفتگی</h2>
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead>
+                <tr>
+                    <th>کاربر</th>
+                    <th>پروژه</th>
+                    <th>هفته</th>
+                    <th>توضیحات</th>
+                    <th>فایل</th>
+                    <th>عملیات</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for report in reports %}
+                <tr>
+                    <td>{{ report.user.username }}</td>
+                    <td>{{ report.project.name|default:'-' }}</td>
+                    <td>{{ report.week_start|to_jalali }} تا {{ report.week_end|to_jalali }}</td>
+                    <td>{{ report.description|default:'-' }}</td>
+                    <td>{% if report.file %}<a href="{{ report.file.url }}" class="btn btn-sm btn-outline-primary" target="_blank">دانلود</a>{% else %}-{% endif %}</td>
+                    <td><a href="/admin/delete_report/{{ report.id }}/" class="btn btn-sm btn-danger">حذف</a></td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="6" class="text-center">گزارشی وجود ندارد.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,241 @@
+{% extends 'core/base.html' %}
+{% block title %}Chat{% endblock %}
+{% block content %}
+<style>
+    body.telegram-bg {
+        background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%) !important;
+    }
+    body.telegram-bg.dark {
+        background: linear-gradient(135deg, #23243a 0%, #23272f 100%) !important;
+    }
+    .tg-chat-container {
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 4px 24px #bfc7d680;
+        padding: 0;
+        overflow: hidden;
+        min-height: 600px;
+        max-height: 80vh;
+        display: flex;
+        flex-direction: column;
+        margin: 0 auto;
+        width: 100%;
+        max-width: 1020px;
+    }
+    body.telegram-bg.dark .tg-chat-container {
+        background: #23243a;
+        color: #f1f1f1;
+    }
+    .tg-header {
+        background: #0088cc;
+        color: #fff;
+        padding: 1rem 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    body.telegram-bg.dark .tg-header {
+        background: #23243a;
+        color: #b3c6ff;
+        border-bottom: 1px solid #33374d;
+    }
+    .tg-header .tg-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+    }
+    .tg-header .tg-btn {
+        background: rgba(255,255,255,0.15);
+        border: none;
+        color: #fff;
+        border-radius: 8px;
+        padding: 0.3rem 1rem;
+        font-size: 0.95rem;
+        transition: background 0.2s;
+    }
+    .tg-header .tg-btn:hover {
+        background: rgba(255,255,255,0.3);
+    }
+    .tg-messages {
+        flex: 1;
+        overflow-y: auto;
+        background: #e6f0fa;
+        padding: 2rem 1.5rem 1rem 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        min-height: 200px;
+        max-height: 55vh;
+    }
+    body.telegram-bg.dark .tg-messages {
+        background: #23243a;
+    }
+    .tg-message-row {
+        display: flex;
+        align-items: flex-end;
+    }
+    .tg-message-row.me {
+        justify-content: flex-end;
+    }
+    .tg-bubble {
+        max-width: 70%;
+        padding: 0.7rem 1.1rem;
+        border-radius: 18px 18px 4px 18px;
+        background: #fff;
+        color: #222;
+        font-size: 1.05em;
+        box-shadow: 0 2px 8px #bfc7d640;
+        margin-bottom: 2px;
+        position: relative;
+        word-break: break-word;
+    }
+    .tg-message-row.me .tg-bubble {
+        background: #0088cc;
+        color: #fff;
+        border-radius: 18px 18px 18px 4px;
+        align-self: flex-end;
+    }
+    body.telegram-bg.dark .tg-bubble {
+        background: #23243a;
+        color: #f1f1f1;
+        box-shadow: 0 2px 8px #0008;
+    }
+    body.telegram-bg.dark .tg-message-row.me .tg-bubble {
+        background: #6c63ff;
+        color: #fff;
+    }
+    .tg-time {
+        font-size: 0.8em;
+        opacity: 0.7;
+        margin-top: 2px;
+        text-align: left;
+        color: #888;
+    }
+    .tg-message-row.me .tg-time {
+        color: #e0eafc;
+        text-align: right;
+    }
+    body.telegram-bg.dark .tg-time {
+        color: #b3c6ff;
+    }
+    body.telegram-bg.dark .tg-message-row.me .tg-time {
+        color: #b3c6ff;
+    }
+    .tg-form {
+        background: #f8fafc;
+        padding: 1rem 1.5rem;
+        border-top: 1px solid #e0eafc;
+        display: flex;
+        gap: 0.7rem;
+        align-items: center;
+    }
+    body.telegram-bg.dark .tg-form {
+        background: #23243a;
+        border-top: 1px solid #33374d;
+    }
+    .tg-form input[type="text"] {
+        flex: 1;
+        border-radius: 12px;
+        border: 1.5px solid #c0d3e8;
+        padding: 0.7rem 1rem;
+        font-size: 1.05em;
+        outline: none;
+        transition: border 0.2s;
+        background: #fff;
+        color: #23243a;
+    }
+    .tg-form input[type="text"]:focus {
+        border: 1.5px solid #0088cc;
+    }
+    body.telegram-bg.dark .tg-form input[type="text"] {
+        background: #23243a;
+        color: #f1f1f1;
+        border: 1.5px solid #33374d;
+    }
+    body.telegram-bg.dark .tg-form input[type="text"]:focus {
+        border: 1.5px solid #6c63ff;
+    }
+    .tg-form button {
+        background: #0088cc;
+        color: #fff;
+        border: none;
+        border-radius: 50%;
+        width: 44px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3em;
+        transition: background 0.2s;
+    }
+    .tg-form button:hover {
+        background: #0077b6;
+    }
+    body.telegram-bg.dark .tg-form button {
+        background: #6c63ff;
+        color: #fff;
+    }
+    body.telegram-bg.dark .tg-form button:hover {
+        background: #5edfff;
+        color: #23243a;
+    }
+</style>
+</style>
+<script>
+</script>
+<div class="row justify-content-center">
+    <div class="col-12 d-flex justify-content-center">
+        <div class="tg-chat-container mt-4">
+            <div class="tg-header">
+                <div class="tg-title">
+                    <span style="font-size:1.7em;">💬</span>
+                    Chat with {% for p in chat.participants.all %}{% if p != user %}{{ p.username }}{% endif %}{% endfor %}
+                </div>
+                <a href="{% url 'start_new_chat' %}" class="tg-btn">New Chat</a>
+            </div>
+            <div id="messages-box" class="tg-messages">
+                {% for msg in messages %}
+                    <div class="tg-message-row {% if msg.sender == user %}me{% endif %}">
+                        <div class="tg-bubble">{{ msg.text|linebreaksbr }}
+                            <div class="tg-time">{{ msg.timestamp|date:'H:i' }}</div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="text-center text-muted">No messages have been sent yet.</div>
+                {% endfor %}
+            </div>
+            <form method="post" class="tg-form" id="chat-form">
+                {% csrf_token %}
+                <input type="text" name="text" id="msg-input" placeholder="Type your message..." autocomplete="off" required>
+                <button type="submit" title="Send"><span style="font-size:1.3em;">&#10148;</span></button>
+            </form>
+
+            </script>
+        </div>
+    </div>
+</div>
+{% for p in chat.participants.all %}{% if p != user %}{% with other_id=p.id %}{% endwith %}{% endif %}{% endfor %}
+<script>
+var otherId = "{{ other_id|default:'' }}";
+if (otherId && window.removeNotifForSender) {
+    window.removeNotifForSender(otherId);
+}
+</script>
+<script>
+
+window.addEventListener('beforeunload', function() {
+    document.body.classList.remove('telegram-bg');
+  
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var messagesBox = document.getElementById('messages-box');
+    if (messagesBox) {
+        messagesBox.scrollTop = messagesBox.scrollHeight;
+    }
+});
+</script>
+{% endblock %}

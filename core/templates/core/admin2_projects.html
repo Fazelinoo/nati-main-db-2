@@ -1,0 +1,42 @@
+{% extends 'core/base.html' %}
+{% load jalali_extras %}
+{% block title %}مدیریت پروژه‌ها{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">مدیریت پروژه‌ها</h2>
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead>
+                <tr>
+                    <th>نام پروژه</th>
+                    <th>توضیحات</th>
+                    <th>تاریخ ایجاد</th>
+                    <th>وضعیت</th>
+                    <th>عملیات</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for project in projects %}
+                <tr>
+                    <td>{{ project.name }}</td>
+                    <td>{{ project.description|default:'-' }}</td>
+                    <td>{{ project.created_at|to_jalali }}</td>
+                    <td><span class="badge bg-{% if project.status == 'pending' %}warning text-dark{% elif project.status == 'active' %}success{% else %}secondary{% endif %}">{{ project.get_status_display }}</span></td>
+                    <td>
+                        <a href="{% url 'project_detail' project.id %}" class="btn btn-sm btn-outline-info">جزئیات</a>
+                        {% if project.status == 'pending' %}
+                        <a href="{% url 'approve_project' project.id %}" class="btn btn-sm btn-success">تایید</a>
+                        {% elif project.status == 'active' %}
+                        <a href="{% url 'archive_project' project.id %}" class="btn btn-sm btn-secondary">آرشیو</a>
+                        {% endif %}
+                        
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="5" class="text-center">پروژه‌ای وجود ندارد.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

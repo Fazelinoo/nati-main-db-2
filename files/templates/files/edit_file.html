@@ -1,0 +1,155 @@
+{% extends 'core/base.html' %}
+{% block title %}ویرایش فایل{% endblock %}
+{% block content %}
+<style>
+  :root {
+    --body-bg: #f7f8fa;
+    --card-bg-light: #fff;
+    --card-bg-dark: #23243a;
+    --text-dark: #b3c6ff;
+    --input-bg-light: #f3f4f8;
+    --input-bg-dark: #23243a;
+    --input-border-light: #d1d5db;
+    --input-border-dark: #444a;
+    --role-badge-bg-light: #eaf1ff;
+    --role-badge-bg-dark: #23243a;
+    --role-badge-border-light: #c7d6f3;
+    --role-badge-border-dark: #444a;
+    --role-badge-label-light: #2563eb;
+    --role-badge-label-dark: #90b4fa;
+    --primary-text: #222;
+    --primary-text-dark: #e6e6e6;
+  }
+  body, html {
+    background: var(--body-bg);
+  }
+  .edit-bg {
+    background: var(--body-bg);
+    min-height: 100vh;
+    padding-top: 32px;
+    transition: background 0.2s;
+  }
+  .card {
+    background: var(--card-bg-light);
+    color: var(--primary-text);
+    border-radius: 16px;
+    box-shadow: 0 2px 16px #b3c6ff22;
+    border: 2.5px solid #e3e6ee;
+    transition: background 0.2s, color 0.2s, border 0.2s;
+  }
+  .form-label, .form-check-label {
+    font-weight: 500;
+    color: var(--primary-text);
+  }
+  .form-control, .form-check-input {
+    background: var(--input-bg-light);
+    color: var(--primary-text);
+    border-radius: 8px;
+    border: 1px solid var(--input-border-light);
+    transition: background 0.2s, color 0.2s;
+  }
+  .role-badge-check {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    background: var(--role-badge-bg-light);
+    border-radius: 20px;
+    padding: 0.25em 0.9em 0.25em 0.7em;
+    font-size: 0.98em;
+    font-weight: 500;
+    border: 1px solid var(--role-badge-border-light);
+    cursor: pointer;
+    margin-bottom: 2px;
+    min-width: 110px;
+    min-height: 36px;
+    user-select: none;
+    transition: background 0.2s, color 0.2s, border 0.2s;
+  }
+  .role-badge-check input[type="checkbox"] {
+    accent-color: #3b82f6;
+    margin-right: 0.3em;
+    margin-left: 0.1em;
+    width: 1.15em;
+    height: 1.15em;
+    border-radius: 6px;
+    border: 2px solid #3b82f6;
+    box-shadow: 0 1px 2px #b3c6ff33;
+    vertical-align: middle;
+    cursor: pointer;
+    transition: accent-color 0.2s, border 0.2s;
+    background: var(--card-bg-light);
+    appearance: auto;
+  }
+  .role-badge-label {
+    color: var(--role-badge-label-light);
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+  html.dark .edit-bg, body.dark .edit-bg {
+    background: var(--card-bg-dark);
+  }
+  html.dark .card, body.dark .card {
+    background: var(--card-bg-dark);
+    color: var(--primary-text-dark);
+    border: 2.5px solid #444a;
+    box-shadow: 0 2px 16px #0004;
+  }
+  html.dark .form-label, html.dark .form-check-label, body.dark .form-label, body.dark .form-check-label {
+    color: var(--primary-text-dark);
+  }
+  html.dark .form-control, html.dark .form-check-input, body.dark .form-control, body.dark .form-check-input {
+    background: var(--input-bg-dark);
+    color: var(--primary-text-dark);
+    border: 1px solid var(--input-border-dark);
+  }
+  html.dark .role-badge-check, body.dark .role-badge-check {
+    background: var(--role-badge-bg-dark);
+    border: 1px solid var(--role-badge-border-dark);
+  }
+  html.dark .role-badge-label, body.dark .role-badge-label {
+    color: var(--role-badge-label-dark);
+  }
+  html.dark .role-badge-check input[type="checkbox"], body.dark .role-badge-check input[type="checkbox"] {
+    accent-color: #90b4fa;
+    background: var(--card-bg-dark);
+    border: 2px solid #90b4fa;
+  }
+</style>
+<div class="edit-bg">
+  <div class="row justify-content-center">
+    <div class="col-md-7">
+        <div class="card p-4 mt-4">
+            <h3 class="mb-3">ویرایش فایل</h3>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+                <div class="mb-3">
+                    <label class="form-label">فایل جدید (در صورت نیاز)</label>
+                    {{ form.file }}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">توضیحات</label>
+                    {{ form.description }}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">سطح دسترسی</label>
+                    {{ form.access_level }}
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">نقش‌های مجاز</label>
+                  <div class="d-flex flex-wrap gap-2">
+                    {% for checkbox in form.allowed_roles %}
+                      <label class="role-badge-check">
+                        {{ checkbox.tag }}
+                        <span class="role-badge-label">{{ checkbox.choice_label }}</span>
+                      </label>
+                    {% endfor %}
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">ذخیره تغییرات</button>
+                <a href="{{ request.GET.next|default:'/' }}" class="btn btn-secondary w-100 mt-2">بازگشت</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

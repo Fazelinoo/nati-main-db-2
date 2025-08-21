@@ -1,0 +1,14 @@
+{% extends 'core/base.html' %}
+{% block title %}Upload Successful{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-7">
+        <div class="card p-4 mt-4 text-center">
+            <h3 class="mb-3">File uploaded successfully!</h3>
+            <p>File name: <b>{{ file.file.name }}</b></p>
+            <a href="/upload/" class="btn btn-primary mt-3">Upload another file</a>
+            <a href="/" class="btn btn-success mt-2">Back to Home</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

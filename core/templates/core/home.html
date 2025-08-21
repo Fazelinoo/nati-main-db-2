@@ -1,0 +1,62 @@
+{% extends 'core/base.html' %}
+{% block title %}Nati Team{% endblock %}
+{% block content %}
+<style>
+    .main-container {
+        min-height: 70vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+    .vertical-actions {
+        position: fixed;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        z-index: 1000;
+        align-items: flex-end;
+        background: none;
+        box-shadow: none;
+        border-radius: 0;
+        padding: 0;
+        min-width: unset;
+    }
+    .vertical-actions a {
+        margin-right: 0 !important;
+    }
+    .center-content {
+        margin: 0 auto;
+        text-align: center;
+        max-width: 500px;
+        z-index: 1;
+    }
+</style>
+
+<div class="main-container">
+    <div class="center-content">
+        <div class="card p-4 mt-4">
+            <h2 class="mb-3">خوش آمدید به پنل تیم</h2>
+            <p>در این پنل می‌توانید فایل‌ها را مدیریت کنید، با اعضا چت کنید و به امکانات ویژه تیم دسترسی داشته باشید.</p>
+        </div>
+    </div>
+    <div class="vertical-actions">
+        <a href="/upload/" class="btn btn-primary shadow">آپلود فایل جدید</a>
+        <a href="/my-files/" class="btn btn-outline-primary shadow">فایل‌های من</a>
+        <a href="/files/" class="btn btn-outline-primary shadow">فایل‌های قابل مشاهده</a>
+        <a href="/chats/" class="btn btn-outline-primary shadow">چت با اعضا</a>
+        <a href="{% url 'project_list' %}" class="btn btn-outline-success shadow">پروژه‌ها و تسک‌ها</a>
+        {% if request.user.is_authenticated %}
+            <a href="{% url 'user_projects' %}" class="btn btn-outline-info shadow">تسک‌های من</a>
+            <a href="{% url 'user_reports' %}" class="btn btn-outline-warning shadow">گزارش‌های من</a>
+        {% endif %}
+        {% if request.user.is_staff %}
+            <a href="/admin/" class="btn btn-outline-secondary shadow">پنل مدیریت</a>
+            <a href="/admin2" class="btn btn-outline-secondary shadow">پنل مدیر</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

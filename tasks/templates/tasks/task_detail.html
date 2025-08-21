@@ -1,0 +1,31 @@
+{% extends 'core/base.html' %}
+{% load jalali_extras %}
+{% block title %}جزئیات تسک{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-sm p-4">
+        <h2>{{ task.title }}</h2>
+        <p>{{ task.description }}</p>
+        <div class="mb-2">پروژه: {{ task.project.name }}</div>
+        <div class="mb-2">تاریخ شروع: {{ task.start_date|to_jalali }}</div>
+        <div class="mb-2">تاریخ پایان: {{ task.due_date|to_jalali }}</div>
+        <div class="mb-2">وضعیت: <span class="badge bg-{% if task.status == 'done' %}success{% elif task.status == 'doing' %}warning text-dark{% elif task.status == 'late' %}danger{% else %}secondary{% endif %}">{{ task.get_status_display }}</span></div>
+        <div class="mb-2">کاربران تسک:
+            {% for user in task.users.all %}
+                <span class="badge bg-info">{{ user.username }}</span>
+            {% endfor %}
+        </div>
+        {% if can_edit %}
+        <form method="post" class="mt-3">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-success">تغییر وضعیت تسک</button>
+        </form>
+        {% endif %}
+        {% if task.project %}
+        <a href="{% url 'project_detail' task.project.id %}" class="btn btn-secondary mt-3">بازگشت به پروژه</a>
+        {% else %}
+        <a href="{% url 'user_projects' %}" class="btn btn-secondary mt-3">بازگشت به لیست تسک‌ها</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'core/base.html' %}
+{% block title %}تخصیص تسک به کاربر{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2>تخصیص تسک به {{ user.username }}</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="title" class="form-label">عنوان تسک</label>
+            <input type="text" class="form-control" id="title" name="title" required>
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">توضیحات</label>
+            <textarea class="form-control" id="description" name="description"></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="start_date" class="form-label">تاریخ شروع</label>
+            <input type="text" class="form-control" id="start_date" name="start_date" placeholder="مثال: 1404-05-20" onfocus="this.type='text'" onblur="this.type='text'">
+        </div>
+        <div class="mb-3">
+            <label for="due_date" class="form-label">تاریخ پایان</label>
+            <input type="text" class="form-control" id="due_date" name="due_date" required placeholder="مثال: 1404-05-25" onfocus="this.type='text'" onblur="this.type='text'">
+        </div>
+        <button type="submit" class="btn btn-primary">ثبت تسک</button>
+        <a href="/admin2/users/" class="btn btn-secondary">بازگشت</a>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,173 @@
+{% extends 'core/base.html' %}
+{% block title %}چت‌های من{% endblock %}
+{% block content %}
+<script>
+
+setInterval(function() {
+    fetch('/heartbeat/', {credentials: 'same-origin'});
+}, 30000);
+
+window.addEventListener('pageshow', function(event) {
+    if (event.persisted || (window.performance && window.performance.getEntriesByType("navigation")[0]?.type === "back_forward")) {
+        window.location.reload();
+    }
+});
+
+window.addEventListener('storage', function(e) {
+    if (e.key === 'theme') {
+        if (e.newValue === 'dark') {
+            document.body.classList.add('dark');
+        } else {
+            document.body.classList.remove('dark');
+        }
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark');
+    } else {
+        document.body.classList.remove('dark');
+    }
+});
+
+function updateChatListUnread() {
+    fetch('/notifications/api/unread/', {credentials: 'same-origin'})
+        .then(r => r.json())
+        .then(data => {
+
+            document.querySelectorAll('.user-tg-avatar-wrap').forEach(function(wrap) {
+                var ring = wrap.querySelector('.tg-unread-ring');
+                if (ring) ring.remove();
+            });
+            if (data.notifications && data.notifications.length > 0) {
+                data.notifications.forEach(n => {
+                    var wrap = document.querySelector('.user-tg-avatar-wrap[data-chat-id="' + n.chat_id + '"]');
+                    if (wrap && !wrap.querySelector('.tg-unread-ring')) {
+                        var span = document.createElement('span');
+                        span.className = 'tg-unread-ring';
+                        wrap.appendChild(span);
+                    }
+                });
+            }
+        });
+}
+setInterval(updateChatListUnread, 7000);
+</script>
+<div class="row justify-content-center" dir="rtl">
+    <div class="col-lg-7 col-md-9">
+        <div class="card mt-4" style="padding:2.2rem 1.7rem;">
+            <h3 class="mb-4" style="text-align:right;font-family:'Inter','Vazirmatn',Tahoma,sans-serif;font-weight:700;">چت‌های شما</h3>
+            {% if chat_info %}
+                <div class="row g-3 mb-3">
+                {% for item in chat_info %}
+                    <div class="col-12">
+                        <a href="{% url 'chat_detail' item.chat.id %}" class="d-flex flex-row-reverse align-items-center justify-content-between p-3 rounded-3 text-decoration-none user-chat-box position-relative mb-2" style="border:1.5px solid var(--border-light);background:#fff;transition:box-shadow 0.2s;">
+                            <div class="d-flex flex-row-reverse align-items-center gap-3 w-100">
+                                <div class="user-chat-avatar-wrap position-relative" data-chat-id="{{ item.chat.id }}">
+                                    <div class="user-chat-avatar">
+                                        {{ item.other.username|first|upper }}
+                                    </div>
+                                    {% if item.unread %}
+                                        <span class="chat-unread-ring"></span>
+                                    {% endif %}
+                                </div>
+                                <div class="w-100" style="text-align:left;direction:ltr;">
+                                    <div style="font-weight:600;font-size:1.1em;text-align:left;">{{ item.other.username }}</div>
+                                    <div class="user-chat-role" style="text-align:left;">{{ item.other.get_role_display }}</div>
+                                    <div class="user-chat-status" style="font-size:0.92em;color:var(--muted-light);text-align:left;">
+                                        {{ item.online_status }}
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+                </div>
+<style>
+.user-chat-box {
+    background: #fff;
+    border: 1.5px solid var(--border-light);
+    transition: box-shadow 0.2s, border 0.2s;
+    box-shadow: none;
+}
+.user-chat-box:hover {
+    box-shadow: 0 2px 12px #e5e7eb33;
+    border-color: #bbb;
+}
+.user-chat-avatar-wrap {
+    position: relative;
+    display: inline-block;
+}
+.user-chat-avatar {
+    width:44px;height:44px;min-width:44px;min-height:44px;border-radius:50%;
+    background:#222;color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.3em;font-weight:600;
+    z-index: 1;
+    font-family:'Inter','Vazirmatn',Tahoma,sans-serif;
+}
+.chat-unread-ring {
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #222;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 2px #bbb;
+}
+                .tg-unread-ring {
+                    position: absolute;
+                    top: -6px;
+                    left: -6px;
+                    width: 60px;
+                    height: 60px;
+                    border-radius: 50%;
+                    border: 3px solid #0088cc;
+                    box-sizing: border-box;
+                    z-index: 2;
+                    animation: tg-pulse-ring 1.2s infinite;
+                }
+                @keyframes tg-pulse-ring {
+                    0% { box-shadow: 0 0 0 0 #0088cc44; }
+                    70% { box-shadow: 0 0 0 8px #0088cc00; }
+                    100% { box-shadow: 0 0 0 0 #0088cc44; }
+                }
+.user-tg-role {
+    font-size:0.95em;color:var(--muted-light);
+}
+body.dark .user-tg-box {
+    background: var(--card-bg-dark);
+}
+body.dark .user-tg-role {
+    color: var(--muted-dark);
+}
+.tg-unread-dot {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #0088cc;
+    box-shadow: 0 0 0 2px #fff;
+    border: 2px solid #fff;
+    z-index: 2;
+    animation: tg-pulse 1.2s infinite;
+}
+@keyframes tg-pulse {
+    0% { box-shadow: 0 0 0 2px #fff, 0 0 0 0 #0088cc44; }
+    70% { box-shadow: 0 0 0 2px #fff, 0 0 0 8px #0088cc00; }
+    100% { box-shadow: 0 0 0 2px #fff, 0 0 0 0 #0088cc44; }
+}
+</style>
+<a href="{% url 'start_new_chat' %}" class="btn btn-outline-primary">شروع چت جدید</a>
+            {% else %}
+                <div class="alert alert-info">شما هنوز با کسی چت نکرده‌اید.</div>
+                <a href="{% url 'start_new_chat' %}" class="btn btn-primary">Start New Chat</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'core/base.html' %}
+{% load jalali_extras %}
+{% block title %}گزارش‌های من{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2>گزارش‌های هفتگی من</h2>
+    <div class="mb-3">
+        <a href="{% url 'upload_weekly_report' %}" class="btn btn-success">آپلود گزارش هفتگی جدید</a>
+    </div>
+    <div class="row g-3">
+        {% if reports %}
+        <ul class="list-group">
+            {% for report in reports %}
+            <li class="list-group-item d-flex justify-content-between align-items-center report-item">
+                <div>
+                    {% if report.project %}
+                    <strong>پروژه:</strong> {{ report.project.name }}<br>
+                    {% endif %}
+                    <strong>هفته:</strong> {{ report.week_start|to_jalali }} تا {{ report.week_end|to_jalali }}<br>
+                    {% if report.description %}<span class="text-muted">{{ report.description|linebreaksbr }}</span>{% endif %}
+                </div>
+                {% if report.file %}
+                <a href="{{ report.file.url }}" target="_blank" class="btn btn-sm btn-outline-primary">دانلود فایل</a>
+                {% else %}
+                <span class="badge bg-secondary">بدون فایل</span>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <div class="alert alert-info">گزارشی برای شما ثبت نشده است.</div>
+        {% endif %}
+    </div>
+</div>
+<style>
+  .report-item {
+    background: var(--card-bg-light);
+    color: var(--text-light);
+  }
+  html.dark .report-item, body.dark .report-item {
+    background: var(--card-bg-dark) !important;
+    color: var(--text-dark) !important;
+  }
+</style>
+{% endblock %}

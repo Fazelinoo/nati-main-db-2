@@ -1,0 +1,34 @@
+{% extends 'core/base.html' %}
+{% block title %}برد کانبان تسک‌ها{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">برد کانبان تسک‌ها</h2>
+    <div class="row g-4">
+        {% for status, status_label, color in [('todo', 'در انتظار', 'secondary'), ('doing', 'در حال انجام', 'warning'), ('done', 'انجام شده', 'success'), ('late', 'عقب‌افتاده', 'danger')] %}
+        <div class="col-md-3">
+            <div class="card shadow-sm">
+                <div class="card-header bg-{{ color }} text-white text-center fw-bold">{{ status_label }}</div>
+                <div class="card-body p-2" style="min-height:200px;">
+                    {% for task in tasks %}
+                        {% if task.status == status %}
+                        <div class="card mb-2 border-{{ color }}">
+                            <div class="card-body p-2">
+                                <div class="fw-bold">{{ task.title }}</div>
+                                <div class="small text-muted">پروژه: {{ task.project.name }}</div>
+                                <div class="small">سررسید: {{ task.due_date|date:'Y/m/d' }}</div>
+                                <span class="badge bg-{% if task.status == 'done' %}success{% elif task.status == 'doing' %}warning text-dark{% elif task.status == 'late' %}danger{% else %}secondary{% endif %}">
+                                    {{ task.get_status_display }}
+                                </span>
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% empty %}
+                        <div class="text-center text-muted">تسکی وجود ندارد.</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

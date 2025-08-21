@@ -1,0 +1,13 @@
+{% extends 'core/base.html' %}
+{% block title %}ایجاد پروژه جدید{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2>ایجاد پروژه جدید</h2>
+    <form method="post" class="card p-4 shadow-sm mt-3">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">ثبت پروژه</button>
+        <a href="{% url 'project_list' %}" class="btn btn-secondary">بازگشت</a>
+    </form>
+</div>
+{% endblock %}
