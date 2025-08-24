@@ -57,7 +57,26 @@ setInterval(updateChatListUnread, 7000);
 <div class="row justify-content-center" dir="rtl">
     <div class="col-lg-7 col-md-9">
         <div class="card mt-4" style="padding:2.2rem 1.7rem;">
-            <h3 class="mb-4" style="text-align:right;font-family:'Inter','Vazirmatn',Tahoma,sans-serif;font-weight:700;">چت‌های شما</h3>
+            <h3 class="mb-4" style="text-align:right;font-family:'Inter','Vazirmatn',Tahoma,sans-serif;font-weight:700;">
+                چت‌های شما
+            </h3>
+            <style>
+            .card {
+                background: var(--card-bg-light) !important;
+                color: var(--text-light) !important;
+                border-radius: 16px !important;
+                box-shadow: 0 4px 24px #bfc7d680;
+                border: none !important;
+                margin-bottom: 1.2rem;
+                transition: box-shadow 0.2s, background 0.2s;
+                padding: 1.2rem 1.5rem !important;
+            }
+            html.dark .card {
+                background: var(--card-bg-dark) !important;
+                color: var(--text-dark) !important;
+                box-shadow: 0 4px 24px #0008;
+            }
+            </style>
             {% if chat_info %}
                 <div class="row g-3 mb-3">
                 {% for item in chat_info %}

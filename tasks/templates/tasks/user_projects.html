@@ -1,6 +1,56 @@
 {% extends 'core/base.html' %}
 {% block title %}پروژه‌های من{% endblock %}
 {% block content %}
+<style>
+.card {
+    background: var(--card-bg-light) !important;
+    color: var(--text-light) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 4px 24px #bfc7d680;
+    border: none !important;
+    margin-bottom: 1.2rem;
+    transition: box-shadow 0.2s, background 0.2s;
+    padding: 1.2rem 1.5rem !important;
+}
+html.dark .card {
+    background: var(--card-bg-dark) !important;
+    color: var(--text-dark) !important;
+    box-shadow: 0 4px 24px #0008;
+}
+.card-footer {
+    background: transparent !important;
+    color: var(--muted-light) !important;
+    border: none !important;
+}
+html.dark .card-footer {
+    color: var(--muted-dark) !important;
+}
+.btn-outline-primary {
+    border: 1.5px solid var(--border-light) !important;
+    color: var(--accent-light) !important;
+}
+html.dark .btn-outline-primary {
+    border: 1.5px solid #5edfff !important;
+    color: #5edfff !important;
+}
+.btn-outline-info {
+    border: 1.5px solid #0dcaf0 !important;
+    color: #0dcaf0 !important;
+}
+html.dark .btn-outline-info {
+    border: 1.5px solid #5edfff !important;
+    color: #5edfff !important;
+}
+.badge {
+    font-size: 0.95em;
+    padding: 0.45em 0.9em;
+    border-radius: 8px;
+}
+html.dark .badge {
+    background: #23243a !important;
+    color: #5edfff !important;
+}
+</style>
 <div class="container mt-4">
     <h2>پروژه‌های من</h2>
     <div class="row g-3">

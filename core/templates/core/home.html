@@ -53,8 +53,8 @@
         z-index: 1;
     }
     .card {
-        background: #fff !important;
-        color: #23243a !important;
+        background: var(--card-bg-light) !important;
+        color: var(--text-light) !important;
         border-radius: 16px !important;
         box-shadow: 0 4px 24px #bfc7d680;
         border: none !important;
@@ -62,12 +62,20 @@
         transition: box-shadow 0.2s, background 0.2s;
         padding: 1.2rem 1.5rem !important;
     }
+    html.dark .card {
+        background: var(--card-bg-dark) !important;
+        color: var(--text-dark) !important;
+        box-shadow: 0 4px 24px #0008;
+    }
     .card h2 {
-        color: #23243a !important;
+        color: var(--text-light) !important;
         font-weight: 700;
     }
     .card p {
         color: #444 !important;
+    }
+    html.dark .card p {
+        color: var(--muted-dark) !important;
     }
 </style>
 <div class="main-container">

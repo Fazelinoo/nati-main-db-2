@@ -33,6 +33,10 @@
             transition: box-shadow 0.2s, border 0.2s;
             box-shadow: none;
         }
+        html.dark .user-chat-box {
+            background: var(--card-bg-dark) !important;
+            border: 1.5px solid var(--border-dark) !important;
+        }
         .user-chat-box:hover {
             box-shadow: 0 2px 12px #e5e7eb33;
             border-color: #bbb;
@@ -46,11 +50,8 @@
         .user-chat-role {
             font-size:0.95em;color:var(--muted-light);
         }
-        body.dark .user-tg-box {
-            background: var(--card-bg-dark);
-        }
-        body.dark .user-tg-role {
-            color: var(--muted-dark);
+        html.dark .user-chat-role {
+            color: var(--muted-dark) !important;
         }
         </style>
         </div>
