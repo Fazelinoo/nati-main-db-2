@@ -376,10 +376,10 @@
         align-items: flex-end;
         gap: 0;
         z-index: 1000;
-        background: none;
-        box-shadow: none;
-        border-radius: 0;
-        padding: 0;
+        background: #181a23 !important;
+        box-shadow: 0 4px 24px #23243a66;
+        border-radius: 16px;
+        padding: 0.5rem 0.2rem;
         min-width: unset;
     }
     .vertical-actions a {
@@ -390,7 +390,15 @@
         font-size: 1rem !important;
         padding: 0.7rem 0.7rem !important;
         box-shadow: none !important;
-        border-top: 1.5px solid #e5e7eb;
+        border-top: 1.5px solid #23243a;
+        background: #23243a !important;
+        color: #fff !important;
+        transition: background 0.2s;
+        text-align: center;
+    }
+    .vertical-actions a:hover {
+        background: #10111a !important;
+        color: #5edfff !important;
     }
     .vertical-actions a:first-child {
         border-top: none;
