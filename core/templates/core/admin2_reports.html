@@ -23,8 +23,14 @@
                     <td>{{ report.project.name|default:'-' }}</td>
                     <td>{{ report.week_start|to_jalali }} تا {{ report.week_end|to_jalali }}</td>
                     <td>{{ report.description|default:'-' }}</td>
-                    <td>{% if report.file %}<a href="{{ report.file.url }}" class="btn btn-sm btn-outline-primary" target="_blank">دانلود</a>{% else %}-{% endif %}</td>
-                    <td><a href="/admin/delete_report/{{ report.id }}/" class="btn btn-sm btn-danger">حذف</a></td>
+                    <td>
+                        {% if report.file %}
+                            <a href="{{ report.file.url }}" class="btn btn-sm btn-outline-primary" target="_blank">دانلود</a>
+                        {% else %}-{% endif %}
+                    </td>
+                    <td>
+                        <a href="/admin2/delete_report/{{ report.id }}/" class="btn btn-sm btn-danger">حذف</a>
+                    </td>
                 </tr>
                 {% empty %}
                 <tr><td colspan="6" class="text-center">گزارشی وجود ندارد.</td></tr>
