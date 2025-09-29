@@ -56,6 +56,9 @@ import jdatetime
 from datetime import datetime
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.http import FileResponse, Http404
+from django.utils.encoding import smart_str
+import os
 
 def is_admin(user):
     return (
@@ -105,6 +108,25 @@ def upload_weekly_report(request, project_id=None):
     else:
         form = WeeklyReportForm(user=request.user, initial=initial)
     return render(request, 'tasks/upload_weekly_report.html', {'form': form})
+
+
+@login_required
+def download_weekly_report(request, report_id):
+    """Serve a WeeklyReport.file as an attachment (download) if the user is owner or admin."""
+    report = get_object_or_404(WeeklyReport, id=report_id)
+    # permission: owner or staff/superuser or project admin
+    user = request.user
+    if not (user == report.user or user.is_staff or user.is_superuser):
+        from django.core.exceptions import PermissionDenied
+        raise PermissionDenied()
+    if not report.file:
+        raise Http404('فایلی موجود نیست')
+    filepath = report.file.path
+    if not os.path.exists(filepath):
+        raise Http404('فایل پیدا نشد')
+    filename = os.path.basename(filepath)
+    response = FileResponse(open(filepath, 'rb'), as_attachment=True, filename=filename)
+    return response
 
 @user_passes_test(is_admin)
 def assign_task(request, user_id):

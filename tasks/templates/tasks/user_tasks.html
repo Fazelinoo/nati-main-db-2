@@ -68,7 +68,7 @@
                 {% for report in reports %}
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     هفته: {{ report.week_start|to_jalali }} تا {{ report.week_end|to_jalali }}
-                    <a href="{{ report.file.url }}" target="_blank" class="btn btn-sm btn-outline-primary">دانلود</a>
+                    <a href="{% url 'download_weekly_report' report.id %}" class="btn btn-sm btn-outline-primary">دانلود</a>
                 </li>
                 {% empty %}
                 <li class="list-group-item text-center">گزارشی ثبت نشده است.</li>

@@ -25,7 +25,7 @@
                     <td>{{ report.description|default:'-' }}</td>
                     <td>
                         {% if report.file %}
-                            <a href="{{ report.file.url }}" class="btn btn-sm btn-outline-primary" target="_blank">دانلود</a>
+                            <a href="{% url 'download_weekly_report' report.id %}" class="btn btn-sm btn-outline-primary">دانلود</a>
                         {% else %}-{% endif %}
                     </td>
                     <td>

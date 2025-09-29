@@ -20,7 +20,7 @@
                     {% if report.description %}<span class="text-muted">{{ report.description|linebreaksbr }}</span>{% endif %}
                 </div>
                 {% if report.file %}
-                <a href="{{ report.file.url }}" target="_blank" class="btn btn-sm btn-outline-primary">دانلود فایل</a>
+                <a href="{% url 'download_weekly_report' report.id %}" class="btn btn-sm btn-outline-primary">دانلود فایل</a>
                 {% else %}
                 <span class="badge bg-secondary">بدون فایل</span>
                 {% endif %}

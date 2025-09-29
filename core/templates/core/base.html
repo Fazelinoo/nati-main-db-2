@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fa">
 <script>
 //  tanzim kardan dark mod va light mode
@@ -404,6 +405,27 @@
         padding: 0.5rem 0.2rem;
         min-width: unset;
     }
+    /* sliding (drawer) behavior */
+    .vertical-actions.drawer {
+        right: -140px;
+        width: 140px;
+        transition: right 0.25s ease;
+    }
+    .vertical-actions.drawer.open {
+        right: 0 !important;
+    }
+    #toggle-vertical-btn {
+        position: fixed;
+        right: 0;
+        top: calc(50% - 20px);
+        z-index: 1001;
+        background: #23243a;
+        color: #fff;
+        border: none;
+        border-radius: 8px 0 0 8px;
+        padding: 6px 10px;
+        cursor: pointer;
+    }
     .vertical-actions a {
         margin: 0 !important;
         border-radius: 0 !important;
@@ -426,7 +448,8 @@
         border-top: none;
     }
 </style>
-<div class="vertical-actions">
+<button id="toggle-vertical-btn" aria-label="باز/بستن پنل" title="باز/بستن پنل">☰</button>
+<div class="vertical-actions drawer" id="vertical-actions">
     <a href="/upload/" class="btn btn-primary shadow">آپلود فایل جدید</a>
     <a href="/my-files/" class="btn btn-outline-primary shadow">فایل‌های من</a>
     <a href="/files/" class="btn btn-outline-primary shadow">فایل‌های قابل مشاهده</a>
@@ -630,6 +653,41 @@ if (notifBtn) {
         e.stopPropagation();
     });
 }
+</script>
+<script>
+// Toggle handler for right vertical actions drawer
+(function(){
+    try {
+        var btn = document.getElementById('toggle-vertical-btn');
+        var panel = document.getElementById('vertical-actions');
+        if (!btn || !panel) return;
+        // initial state from localStorage (closed by default)
+        var open = localStorage.getItem('verticalActionsOpen') === '1';
+        if (open) panel.classList.add('open');
+        btn.addEventListener('click', function(e){
+            open = !open;
+            if (open) {
+                panel.classList.add('open');
+                localStorage.setItem('verticalActionsOpen','1');
+            } else {
+                panel.classList.remove('open');
+                localStorage.setItem('verticalActionsOpen','0');
+            }
+            e.stopPropagation();
+        });
+        // click outside to close
+        window.addEventListener('click', function(e){
+            if (!open) return;
+            if (!panel.contains(e.target) && e.target !== btn) {
+                open = false;
+                panel.classList.remove('open');
+                localStorage.setItem('verticalActionsOpen','0');
+            }
+        });
+    } catch (err) {
+        console.warn('vertical actions init error', err);
+    }
+})();
 </script>
 </body>
 </html>
